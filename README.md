@@ -32,7 +32,9 @@ https://user-images.githubusercontent.com/97110015/230616415-4c6a24c5-1cfe-474c-
 
 
 # Installation
-if you would like to try it feel free to download the whole project in one folder and run the exe
+if you would like to try it feel free to download [this](https://github.com/YUSUF-SELEIM/Brick_Out_Simple_Clone/raw/main/BrickOut.zip) zip file 
+* extract it
+* run exe file
 
 # License
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
