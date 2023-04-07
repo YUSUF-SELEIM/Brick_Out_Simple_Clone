@@ -32,4 +32,12 @@ https://user-images.githubusercontent.com/97110015/230616415-4c6a24c5-1cfe-474c-
 
 
 # Installation
-if you would like to try it feel free to install this exe from [here](https://github.com/YUSUF-SELEIM/Brick_Out_Simple_Clone/blob/main/Brick_Out_Simple_Clone.exe)
+if you would like to try it feel free to install this exe from [here](https://github.com/YUSUF-SELEIM/Brick_Out_Simple_Clone/raw/main/Brick_Out_Simple_Clone.exe)
+
+# License
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+# References
+* i watched maybe the first 30 minutes in [here](https://youtu.be/FfWpgLFMI7w) just to understand the basics of pygame then i took the lead
+* i watched punch of different videos from [this](https://www.youtube.com/@ClearCode) channel to understrand the basics of collisions and other stuff
+* The rest of the game is from my brain cells
