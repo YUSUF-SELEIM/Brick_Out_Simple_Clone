@@ -14,14 +14,14 @@ clock = pygame.time.Clock()
 fps = 150
 speed = [2, 2]
 running = True
-didTheyPressEnter = False
-gameOverorNot = False
+didTheyPressSpace = False
+gameOverOrNot = False
 
 font = pygame.font.Font('freesansbold.ttf', 64)
 
 scoreCounter = 0
 aGiftHasTouchedTheBar = False
-cancelCollisionBetweenBarAndBricks = False
+cancelCollisionBetweenBallAndBricks = False
 isItSLow = False
 aCurseHasTouchedTheBar = False
 flashyOrNot = False
@@ -55,7 +55,7 @@ youWon = font.render('You Won', True, 'red')
 textRectYouWon = youWon.get_rect()
 textRectYouWon.center = (800 // 2, 200)
 
-gameOver = font.render('Game Over', True, 'red')
+gameOver = font.render('Game Over',True, 'red')
 textRectGameOver = gameOver.get_rect()
 textRectGameOver.center = (800 // 2, 200)
 
@@ -70,8 +70,8 @@ textRectForStartGame.center = (800 // 2, 400)
 # Creating and rendering bricks in Main Screen
 def createBricksInMain():
     brickInMain = []
-    for i in range(15):
-        for j in range(8):
+    for i in range(15): #column
+        for j in range(8): #row
             brick = pygame.Rect(j * 100 + 1, i * 40 + 1, 100, 40)
             brickInMain.append(brick)
     return brickInMain
@@ -89,12 +89,9 @@ randomColorMainScreen = [(0, 0, 255)
 bricksInMain = createBricksInMain()
 
 def brickPainterInMain():
-    colorIndexer = 0
     for brick in bricksInMain:
-        pygame.draw.rect(screen, randomColorMainScreen[random.randint(0, 7)], brick, 0)
-        colorIndexer += 1
-        if colorIndexer == 8:
-            colorIndexer = 0
+        pygame.draw.rect(screen, randomColorMainScreen[random.randint(0, 7)], brick)
+
             
 def brickCollisionDetectorInMain():
     for brick in bricksInMain:
@@ -104,8 +101,8 @@ def brickCollisionDetectorInMain():
 # Creating and rendering bricks in Game Screen
 def createBricksInGame():
     bricks = []
-    for i in range(7):
-        for j in range(8):
+    for i in range(7): #col
+        for j in range(8): #row
             brick = pygame.Rect(j * 100 + 1, i * 40 + 1, 95, 30)
             bricks.append(brick)
     return bricks
@@ -118,14 +115,14 @@ bricks = createBricksInGame()
 def brickPainter():
     colorIndexer = 0
     for brick in bricks:
-        pygame.draw.rect(screen, randomColor[colorIndexer], brick, 0)
+        pygame.draw.rect(screen, randomColor[colorIndexer], brick)
         colorIndexer += 1
         if colorIndexer == 9:
             colorIndexer = 0
 
 # The Bar Movement System
 def barMovement(x, y, flashyOrNotArgs):
-    if flashyOrNotArgs:
+    if flashyOrNotArgs: # [red , black]
         global barSize
         barSize = 150 // 2
         pygame.draw.rect(screen, random.choice(flashyBarColors), bar, 1)
@@ -146,9 +143,9 @@ def gifted():
     if bar.colliderect(gift):
         global aGiftHasTouchedTheBar
         aGiftHasTouchedTheBar = True
-        global cancelCollisionBetweenBarAndBricks
-        cancelCollisionBetweenBarAndBricks = True
-        global enlargeBar
+        global cancelCollisionBetweenBallAndBricks
+        cancelCollisionBetweenBallAndBricks = True
+        # global enlargeBar
         print('gift')
 
 def curseSlider():
@@ -176,7 +173,7 @@ def didTheBallHitTheBar():  # if the ball hit the bar or bricks
     if bar.colliderect(ballCircle):
         if bar.topleft[0] <= ballCircle.centerx <= bar.midtop[0] - 30:  # how about from left to 3/4 the bar
             # left side of the bar
-            speed[0] = -2
+            speed[0] = -2 
             speed[1] = -speed[1]
             print(bar.topleft[0])
             # print('X-->  ', speed[0])
@@ -198,14 +195,14 @@ def iWouldLikeToDeleteSomeBricksCuzOfCollision():
             del bricks[index]
             global scoreCounter
             scoreCounter += 1
-            if not cancelCollisionBetweenBarAndBricks:
+            if not cancelCollisionBetweenBallAndBricks:
                 speed[1] = -speed[1]  # if it really hit the brick reverse the direction of the ball
 
 # Resetting the Game
 def restartGame():
-    global bricks, scoreCounter, gameOverorNot, ballCircle , bar ,timeLimit
+    global bricks, scoreCounter, gameOverOrNot, ballCircle , bar ,timeLimit
     scoreCounter = 0
-    gameOverorNot = False
+    gameOverOrNot = False
     screen.fill((0, 0, 0))
     ballCircle.update(450, 300, ball.get_width(), ball.get_height())
     bar = pygame.Rect(barX, barY, 150, 20)
@@ -214,7 +211,7 @@ def restartGame():
 
 # The Main Loop
 while running:
-    if not didTheyPressEnter:
+    if not didTheyPressSpace:
         clock.tick(150)
         screen.fill((0, 0, 0))
         brickPainterInMain()
@@ -225,11 +222,9 @@ while running:
                 running = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    didTheyPressEnter = True
-            if event.type == pygame.KEYUP:
-                if event.key == pygame.K_SPACE:
+                    didTheyPressSpace = True
                     barChangeX = 0
-
+      
         if ballMainScreen.left < 0 or ballMainScreen.right > 800:
             speed[0] = -speed[0]
 
@@ -240,7 +235,7 @@ while running:
         screen.blit(ballMainScreenI, ballMainScreen)
         screen.blit(brickBreaker, textRectForbrickBreaker)
         screen.blit(startGame, textRectForStartGame)
-    else:
+    else: # In Game                                               
         end = time.perf_counter()
         timeLimit = end - start
         if aCurseHasTouchedTheBar and timeLimit > 6:
@@ -253,9 +248,9 @@ while running:
             barSize = 150
             start = end
         if aGiftHasTouchedTheBar and timeLimit > 4:
-            cancelCollisionBetweenBarAndBricks = False
+            cancelCollisionBetweenBallAndBricks = False
             aGiftHasTouchedTheBar = False
-            enlargeBar = False
+            # enlargeBar = True
             start = end
 
         clock.tick(fps)
@@ -265,7 +260,6 @@ while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-
             if event.type == pygame.KEYDOWN and not aCurseHasTouchedTheBar:
                 if event.key == pygame.K_LEFT:
                     barChangeX = -5
@@ -282,16 +276,17 @@ while running:
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT:
                         barChangeX = 0
-            elif event.type == pygame.KEYDOWN and gameOverorNot:
+            elif event.type == pygame.KEYDOWN and gameOverOrNot:
                 if event.key == pygame.K_r:
                     restartGame()
         barX += barChangeX
+        # Preventing the bar from going out of the screen
         if barSize == 150:
             if barX <= 5:
                 barX = 5
             elif barX >= 645:
                 barX = 645
-        else:
+        else: # bar is cursed and its size is reduced
             if barX <= 5:
                 barX = 5
             elif barX >= 720:
@@ -303,7 +298,7 @@ while running:
         if ballCircle.top < 0:
             speed[1] = -speed[1]
 
-        if not gameOverorNot:
+        if not gameOverOrNot:
             iWouldLikeToDeleteSomeBricksCuzOfCollision()
             curseSlider()
             cursed()
@@ -318,24 +313,24 @@ while running:
         textRectScore.center = (41, 590)
 
         ballCircle = ballCircle.move(speed)
-
         screen.blit(ball, ballCircle)
 
         # You Win??
         if len(bricks) == 0:
             screen.fill('black')
             screen.blit(youWon, textRectYouWon)
+            gameOverOrNot = True
         # Game Over??
-        if ballCircle.bottom > 600 and len(bricks) != 0:
-            gameOverorNot = True
+        if ballCircle.bottom > 600 :
+            gameOverOrNot = True
             screen.fill('black')
             screen.blit(gameOver, textRectGameOver)
 
         screen.blit(score, textRectScore)
-        if not aGiftHasTouchedTheBar and ballCircle.bottom < 600 and not gameOverorNot and len(bricks) != 0:
+        if not aGiftHasTouchedTheBar and ballCircle.bottom < 600 and not gameOverOrNot and len(bricks) != 0:
             screen.blit(giftI, gift)
-        if not aCurseHasTouchedTheBar and ballCircle.bottom < 600 and not gameOverorNot and len(bricks) != 0:
+        if not aCurseHasTouchedTheBar and ballCircle.bottom < 600 and not gameOverOrNot and len(bricks) != 0:
             screen.blit(curseI, curse)
-        if not gameOverorNot and len(bricks) != 0:
+        if not gameOverOrNot and len(bricks) != 0:
             barMovement(barX, barY, flashyOrNot)
     pygame.display.update()
